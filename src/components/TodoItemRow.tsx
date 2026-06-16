@@ -9,7 +9,7 @@ interface Props {
 
 export function TodoItemRow({ item, accentColor, onToggle, onToggleSubStep }: Props) {
   return (
-    <div className="py-2.5">
+    <div className="py-1.5">
       <div className="flex items-start gap-3">
         <button
           onClick={onToggle}
