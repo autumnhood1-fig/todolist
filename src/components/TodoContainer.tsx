@@ -53,6 +53,7 @@ export function TodoContainer({ container, color, onToggleItem, onToggleSubStep,
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>(
     () => Object.fromEntries((container.sections ?? []).map(s => [s.id, true]))
   );
+  const [showDone, setShowDone] = useState(false);
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
 
@@ -209,8 +210,25 @@ export function TodoContainer({ container, color, onToggleItem, onToggleSubStep,
 
             {completedItems.length > 0 && (
               <div className={activeItems.length > 0 ? 'border-t border-stone-100 mt-1 pt-1' : ''}>
-                <p className="text-[10px] uppercase tracking-widest text-stone-300 pt-2 pb-0.5">Done</p>
-                {completedItems.map(item => (
+                <button
+                  onClick={() => setShowDone(d => !d)}
+                  className="flex items-center gap-1.5 pt-2 pb-0.5 group/done"
+                >
+                  <span className="text-[10px] uppercase tracking-widest text-stone-300 group-hover/done:text-stone-400 transition-colors">
+                    Done
+                  </span>
+                  <span className="text-[10px] text-stone-300 group-hover/done:text-stone-400 transition-colors">
+                    ({completedItems.length})
+                  </span>
+                  <svg
+                    viewBox="0 0 16 16"
+                    className={`w-2.5 h-2.5 text-stone-300 group-hover/done:text-stone-400 transition-all duration-150 ${showDone ? '' : '-rotate-90'}`}
+                    fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                  >
+                    <polyline points="4,6 8,10 12,6" />
+                  </svg>
+                </button>
+                {showDone && completedItems.map(item => (
                   <div key={item.id}>
                     <TodoItemRow
                       item={item}
