@@ -20,6 +20,7 @@ export const INITIAL_CONTAINERS: Container[] = [
       { id: 'call-6', text: "Cancel Cloaked – tell them it's not working", subSteps: [], completed: false },
       { id: 'call-7', text: 'UNT Payroll', subSteps: [], completed: false },
       { id: 'call-8', text: 'RI Insurance agent once registered', subSteps: [], completed: false },
+      { id: 'call-9', text: 'Anthem – Propanolol', subSteps: [], completed: false },
     ],
   },
   {
@@ -174,6 +175,24 @@ export const INITIAL_CONTAINERS: Container[] = [
       { id: 'per-11', text: 'Video doorbell', subSteps: [], completed: false },
       { id: 'per-12', text: 'Car registration appt', subSteps: [], completed: false },
       { id: 'per-13', text: 'Organize playroom', subSteps: [], completed: false },
+      {
+        id: 'per-14',
+        text: 'Hall bathroom',
+        subSteps: [
+          { id: 'per-14-1', text: 'Toothbrush charging station', completed: false },
+        ],
+        completed: false,
+      },
+      {
+        id: 'per-15',
+        text: 'Living room',
+        subSteps: [
+          { id: 'per-15-1', text: 'Drawer organization', completed: false },
+          { id: 'per-15-2', text: 'Firestick', completed: false },
+        ],
+        completed: false,
+      },
+      { id: 'per-16', text: 'Cord management', subSteps: [], completed: false },
     ],
   },
   {
@@ -224,6 +243,7 @@ export const INITIAL_CONTAINERS: Container[] = [
       { id: 'unt-2', text: 'Add checklist items here', subSteps: [], completed: false },
       { id: 'unt-3', text: 'Memo grading web app', subSteps: [], completed: false },
       { id: 'unt-4', text: 'Memo video assignments', subSteps: [], completed: false },
+      { id: 'unt-5', text: 'PW recovery', subSteps: [], completed: false },
     ],
   },
   {
@@ -262,6 +282,7 @@ export const INITIAL_CONTAINERS: Container[] = [
     size: 'medium',
     items: [
       { id: 'buy-1', text: 'Warm bulbs for guest room', subSteps: [], completed: false },
+      { id: 'buy-2', text: 'Iron supplement', subSteps: [], completed: false },
     ],
   },
   {
