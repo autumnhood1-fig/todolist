@@ -28,8 +28,17 @@ export const INITIAL_CONTAINERS: Container[] = [
     size: 'big',
     items: [
       { id: 'ot-1', text: 'Print Project sheet', subSteps: [], completed: false },
-      { id: 'ot-2', text: 'FSAD skills / agent', subSteps: [], completed: false },
-      { id: 'ot-3', text: 'FSAD Demo prep w/ Ishara', subSteps: [], completed: false },
+      {
+        id: 'ot-fsad',
+        text: 'FSAD',
+        subSteps: [
+          { id: 'ot-fsad-1', text: 'Skills / agent', completed: false },
+          { id: 'ot-fsad-2', text: 'Demo prep w/ Ishara', completed: false },
+          { id: 'ot-fsad-3', text: 'UX audit agent', completed: false },
+          { id: 'ot-fsad-4', text: 'Prism hosting', completed: false },
+        ],
+        completed: false,
+      },
       { id: 'ot-4', text: 'MCR fix Giftshop', subSteps: [], completed: false },
       {
         id: 'sys-manager',
@@ -130,7 +139,7 @@ export const INITIAL_CONTAINERS: Container[] = [
         completed: false,
       },
       { id: 'per-2', text: 'Upload IG saves & screenshots to Claude and delete', subSteps: [], completed: false },
-      { id: 'per-3', text: 'Clean up online storage (iPhone, Evan\'s, drives — export to MixBook and DVDs as needed)', subSteps: [], completed: false },
+      { id: 'per-3', text: "Clean up online storage (iPhone, Evan's, drives — export to MixBook and DVDs as needed)", subSteps: [], completed: false },
       { id: 'per-4', text: 'Start Xmas gifts – kids art Mixbook', subSteps: [], completed: false },
       { id: 'per-5', text: 'Review IG following list and transfer to Claude', subSteps: [], completed: false },
       { id: 'per-6', text: 'Add Niantic and recent IG saves to NE Bucket List', subSteps: [], completed: false },
@@ -155,17 +164,7 @@ export const INITIAL_CONTAINERS: Container[] = [
         ],
         completed: false,
       },
-    ],
-  },
-  {
-    id: 'unt',
-    name: 'UNT',
-    size: 'medium',
-    items: [
-      { id: 'unt-1', text: "Read Teagan's articles", subSteps: [], completed: false },
-      { id: 'unt-2', text: 'Add checklist items here', subSteps: [], completed: false },
-      { id: 'unt-3', text: 'Memo grading web app', subSteps: [], completed: false },
-      { id: 'unt-4', text: 'Memo video assignments', subSteps: [], completed: false },
+      { id: 'per-9', text: 'Libby sync', subSteps: [], completed: false },
     ],
   },
   {
@@ -197,6 +196,66 @@ export const INITIAL_CONTAINERS: Container[] = [
     ],
   },
   {
+    id: 'kids',
+    name: 'Kids',
+    size: 'medium',
+    items: [
+      { id: 'kids-1', text: "Write Leo's teacher", subSteps: [], completed: false },
+      { id: 'kids-2', text: "Leo's next appt on calendar", subSteps: [], completed: false },
+      { id: 'kids-3', text: "Boys' dentist appts on calendar", subSteps: [], completed: false },
+      { id: 'kids-4', text: 'Gymnastics research', subSteps: [], completed: false },
+    ],
+  },
+  {
+    id: 'unt',
+    name: 'UNT',
+    size: 'medium',
+    items: [
+      { id: 'unt-1', text: "Read Teagan's articles", subSteps: [], completed: false },
+      { id: 'unt-2', text: 'Add checklist items here', subSteps: [], completed: false },
+      { id: 'unt-3', text: 'Memo grading web app', subSteps: [], completed: false },
+      { id: 'unt-4', text: 'Memo video assignments', subSteps: [], completed: false },
+    ],
+  },
+  {
+    id: 'travel',
+    name: 'Travel',
+    size: 'medium',
+    items: [
+      {
+        id: 'tr-nyc',
+        text: 'NYC',
+        subSteps: [
+          { id: 'tr-nyc-1', text: 'Buy train tickets', completed: false },
+          { id: 'tr-nyc-2', text: 'Book lodging', completed: false },
+          { id: 'tr-nyc-3', text: 'Pre-purchase attractions (Groupons, City Pass, etc.)', completed: false },
+        ],
+        completed: false,
+      },
+      {
+        id: 'tr-girls',
+        text: 'Girls trip',
+        subSteps: [
+          { id: 'tr-girls-1', text: 'Dates on calendar', completed: false },
+          { id: 'tr-girls-2', text: 'Child arrangements', completed: false },
+          { id: 'tr-girls-3', text: 'Flights', completed: false },
+        ],
+        completed: false,
+      },
+      { id: 'tr-4', text: 'Update address on any flights after move date', subSteps: [], completed: false },
+      { id: 'tr-5', text: 'Call AA / Delta etc. to change address on upcoming tickets', subSteps: [], completed: false },
+      { id: 'tr-6', text: "Update everyone's AA / Delta address", subSteps: [], completed: false },
+    ],
+  },
+  {
+    id: 'to-buy',
+    name: 'To Buy',
+    size: 'medium',
+    items: [
+      { id: 'buy-1', text: 'Warm bulbs for guest room', subSteps: [], completed: false },
+    ],
+  },
+  {
     id: 'finances',
     name: 'Finances',
     size: 'medium',
@@ -211,27 +270,6 @@ export const INITIAL_CONTAINERS: Container[] = [
       },
       { id: 'fin-2', text: "Add Autumn to Evan's Chase acct", subSteps: [], completed: false },
       { id: 'fin-3', text: "Close Autumn's Chase acct", subSteps: [], completed: false },
-    ],
-  },
-  {
-    id: 'travel',
-    name: 'Travel',
-    size: 'medium',
-    items: [
-      { id: 'tr-1', text: 'Buy NY train tickets', subSteps: [], completed: false },
-      { id: 'tr-2', text: 'Book NY lodging', subSteps: [], completed: false },
-      { id: 'tr-3', text: 'Pre-purchase NY attractions (Groupons, City Pass, etc.)', subSteps: [], completed: false },
-      { id: 'tr-4', text: 'Update address on any flights after move date', subSteps: [], completed: false },
-      { id: 'tr-5', text: 'Call AA / Delta etc. to change address on upcoming tickets', subSteps: [], completed: false },
-      { id: 'tr-6', text: "Update everyone's AA / Delta address", subSteps: [], completed: false },
-    ],
-  },
-  {
-    id: 'to-buy',
-    name: 'To Buy',
-    size: 'medium',
-    items: [
-      { id: 'buy-1', text: 'Warm bulbs for guest room', subSteps: [], completed: false },
     ],
   },
   {

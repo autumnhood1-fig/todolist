@@ -11,7 +11,7 @@ const DATE_OPTS: Intl.DateTimeFormatOptions = {
 
 const ROWS: { ids: string[]; cols: string }[] = [
   { ids: ['chores', 'calls', 'otelier'],        cols: 'grid-cols-1 lg:grid-cols-3' },
-  { ids: ['personal', 'health'],                cols: 'grid-cols-1 md:grid-cols-2' },
+  { ids: ['personal', 'health', 'kids'],         cols: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' },
   { ids: ['unt', 'travel', 'to-buy'],           cols: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' },
   { ids: ['finances', 'writing'],               cols: 'grid-cols-1 sm:grid-cols-2' },
 ];

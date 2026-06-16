@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Container, TodoItem, SubStep } from '../types';
 import { INITIAL_CONTAINERS } from '../initialData';
 
-const STORAGE_KEY = 'todos-v1';
+const STORAGE_KEY = 'todos-v2';
 const EXPIRY_MS = 48 * 60 * 60 * 1000;
 
 function purgeExpired(containers: Container[]): Container[] {
