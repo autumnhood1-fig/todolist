@@ -159,5 +159,39 @@ export function useTodos() {
     );
   }
 
-  return { containers, toggleItem, toggleSubStep, addItem, addSubStep, tagEvan, reorderItems };
+  function moveItemToContainer(fromContainerId: string, toContainerId: string, itemId: string) {
+    setContainers(prev => {
+      const fromContainer = prev.find(c => c.id === fromContainerId);
+      if (!fromContainer) return prev;
+      const item = fromContainer.items.find(i => i.id === itemId);
+      if (!item) return prev;
+
+      const fromActive = fromContainer.items.filter(i => !i.completed);
+      const itemActiveIndex = fromActive.findIndex(i => i.id === itemId);
+      const fromDivider = fromContainer.dividerIndex ?? 1;
+      const newFromDivider = itemActiveIndex !== -1 && itemActiveIndex < fromDivider
+        ? Math.max(0, fromDivider - 1)
+        : fromDivider;
+
+      return prev.map(c => {
+        if (c.id === fromContainerId) {
+          return { ...c, items: c.items.filter(i => i.id !== itemId), dividerIndex: newFromDivider };
+        }
+        if (c.id === toContainerId) {
+          const activeItems = c.items.filter(i => !i.completed);
+          const completedItems = c.items.filter(i => i.completed);
+          return { ...c, items: [...activeItems, { ...item, completed: false, completedAt: undefined }, ...completedItems] };
+        }
+        return c;
+      });
+    });
+  }
+
+  function reorderSubSteps(containerId: string, itemId: string, newSubSteps: SubStep[]) {
+    updateItems(containerId, items =>
+      items.map(item => item.id === itemId ? { ...item, subSteps: newSubSteps } : item)
+    );
+  }
+
+  return { containers, toggleItem, toggleSubStep, addItem, addSubStep, tagEvan, reorderItems, moveItemToContainer, reorderSubSteps };
 }

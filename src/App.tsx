@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTodos } from './hooks/useTodos';
 import { TodoContainer } from './components/TodoContainer';
 import { getColor } from './colors';
@@ -17,7 +18,12 @@ const ROWS: { ids: string[]; cols: string }[] = [
 ];
 
 export default function App() {
-  const { containers, toggleItem, toggleSubStep, addItem, addSubStep, tagEvan, reorderItems } = useTodos();
+  const {
+    containers, toggleItem, toggleSubStep, addItem, addSubStep,
+    tagEvan, reorderItems, moveItemToContainer, reorderSubSteps,
+  } = useTodos();
+
+  const [crossDrag, setCrossDrag] = useState<{ itemId: string; fromId: string } | null>(null);
 
   const byId = Object.fromEntries(containers.map(c => [c.id, c]));
 
@@ -33,6 +39,14 @@ export default function App() {
         onAddSubStep={(itemId, text) => addSubStep(c.id, itemId, text)}
         onTagEvan={(itemId) => tagEvan(c.id, itemId)}
         onReorderItems={(newItems, newDividerIndex) => reorderItems(c.id, newItems, newDividerIndex)}
+        onReorderSubSteps={(itemId, newSubSteps) => reorderSubSteps(c.id, itemId, newSubSteps)}
+        onCrossDragStart={(itemId) => setCrossDrag({ itemId, fromId: c.id })}
+        onCrossDragEnd={() => setCrossDrag(null)}
+        isExternalDragActive={crossDrag !== null && crossDrag.fromId !== c.id}
+        onReceiveExternalDrop={() => {
+          if (crossDrag) moveItemToContainer(crossDrag.fromId, c.id, crossDrag.itemId);
+          setCrossDrag(null);
+        }}
       />
     );
   }

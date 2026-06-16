@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Container, TodoItem } from '../types';
+import type { Container, TodoItem, SubStep } from '../types';
 import type { ContainerColor } from '../colors';
 import { TodoItemRow } from './TodoItemRow';
 import { AddItemForm } from './AddItemForm';
@@ -15,6 +15,12 @@ interface Props {
   onAddSubStep: (itemId: string, text: string) => void;
   onTagEvan: (itemId: string) => void;
   onReorderItems: (newItems: TodoItem[], newDividerIndex: number) => void;
+  onReorderSubSteps: (itemId: string, newSubSteps: SubStep[]) => void;
+  // cross-container drag
+  onCrossDragStart: (itemId: string) => void;
+  onCrossDragEnd: () => void;
+  isExternalDragActive: boolean;
+  onReceiveExternalDrop: () => void;
 }
 
 function Chevron({ collapsed, color }: { collapsed: boolean; color: string }) {
@@ -47,7 +53,12 @@ function GripIcon() {
   );
 }
 
-export function TodoContainer({ container, color, onToggleItem, onToggleSubStep, onAddItem, onAddSubStep, onTagEvan, onReorderItems }: Props) {
+export function TodoContainer({
+  container, color,
+  onToggleItem, onToggleSubStep, onAddItem, onAddSubStep, onTagEvan,
+  onReorderItems, onReorderSubSteps,
+  onCrossDragStart, onCrossDragEnd, isExternalDragActive, onReceiveExternalDrop,
+}: Props) {
   const [collapsed, setCollapsed] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>(
@@ -56,6 +67,7 @@ export function TodoContainer({ container, color, onToggleItem, onToggleSubStep,
   const [showDone, setShowDone] = useState(false);
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
+  const [isExternalDropTarget, setIsExternalDropTarget] = useState(false);
 
   const activeItems = container.items.filter(i => !i.completed);
   const completedItems = container.items.filter(i => i.completed);
@@ -73,6 +85,7 @@ export function TodoContainer({ container, color, onToggleItem, onToggleSubStep,
   function handleDragStart(id: string, e: React.DragEvent) {
     setDraggedId(id);
     e.dataTransfer.effectAllowed = 'move';
+    onCrossDragStart(id);
   }
 
   function handleDragOver(targetId: string, e: React.DragEvent) {
@@ -120,15 +133,12 @@ export function TodoContainer({ container, color, onToggleItem, onToggleSubStep,
         draggable
         onDragStart={(e) => handleDragStart(item.id, e)}
         onDragOver={(e) => handleDragOver(item.id, e)}
-        onDrop={() => handleDrop(item.id)}
-        onDragEnd={cleanup}
+        onDrop={(e) => { e.stopPropagation(); handleDrop(item.id); }}
+        onDragEnd={() => { cleanup(); onCrossDragEnd(); }}
         className={`relative group/drag transition-opacity ${hasBorderBottom ? 'border-b border-stone-50' : ''} ${isDragging ? 'opacity-30' : 'opacity-100'}`}
         style={isDropTarget ? { borderTop: `2px solid ${color.accent}` } : undefined}
       >
-        {/* 6-dot grip handle, right edge, appears on hover */}
-        <div
-          className="absolute right-0 inset-y-0 w-5 flex items-center justify-center opacity-0 group-hover/drag:opacity-25 cursor-grab active:cursor-grabbing text-stone-400 pointer-events-none"
-        >
+        <div className="absolute right-0 inset-y-0 w-5 flex items-center justify-center opacity-0 group-hover/drag:opacity-25 cursor-grab active:cursor-grabbing text-stone-400 pointer-events-none">
           <GripIcon />
         </div>
 
@@ -139,6 +149,7 @@ export function TodoContainer({ container, color, onToggleItem, onToggleSubStep,
           onToggle={() => onToggleItem(item.id)}
           onToggleSubStep={(subId) => onToggleSubStep(item.id, subId)}
           onTagEvan={() => onTagEvan(item.id)}
+          onReorderSubSteps={(newSubSteps) => onReorderSubSteps(item.id, newSubSteps)}
         />
       </div>
     );
@@ -146,8 +157,32 @@ export function TodoContainer({ container, color, onToggleItem, onToggleSubStep,
 
   return (
     <div
-      className="bg-white rounded-xl shadow-sm flex flex-col overflow-hidden"
-      style={{ border: `1px solid ${color.accent}28`, borderTop: `3px solid ${color.accent}` }}
+      className="bg-white rounded-xl shadow-sm flex flex-col overflow-hidden transition-all duration-150"
+      style={{
+        border: `1px solid ${color.accent}28`,
+        borderTop: `3px solid ${color.accent}`,
+        outline: isExternalDropTarget ? `2px solid ${color.accent}` : undefined,
+        outlineOffset: '1px',
+      }}
+      onDragOver={(e) => {
+        if (isExternalDragActive) {
+          e.preventDefault();
+          setIsExternalDropTarget(true);
+        }
+      }}
+      onDragLeave={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+          setIsExternalDropTarget(false);
+        }
+      }}
+      onDrop={(e) => {
+        if (isExternalDragActive) {
+          e.preventDefault();
+          e.stopPropagation();
+          onReceiveExternalDrop();
+        }
+        setIsExternalDropTarget(false);
+      }}
     >
       {/* Header */}
       <button
@@ -189,7 +224,7 @@ export function TodoContainer({ container, color, onToggleItem, onToggleSubStep,
                 {/* Divider */}
                 <div
                   onDragOver={(e) => handleDragOver(DIVIDER_ID, e)}
-                  onDrop={() => handleDrop(DIVIDER_ID)}
+                  onDrop={(e) => { e.stopPropagation(); handleDrop(DIVIDER_ID); }}
                   className="flex items-center gap-2 py-1 select-none"
                   style={dropTargetId === DIVIDER_ID && draggedId !== DIVIDER_ID
                     ? { borderTop: `2px solid ${color.accent}` }
