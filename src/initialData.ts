@@ -121,6 +121,8 @@ export const INITIAL_CONTAINERS: Container[] = [
       },
       { id: 'ch-12', text: 'Hang hallway pics', subSteps: [], completed: false },
       { id: 'ch-13', text: 'Move kitty litter', subSteps: [], completed: false },
+      { id: 'ch-14', text: 'Humidifiers', subSteps: [], completed: false },
+      { id: 'ch-15', text: 'Medicines prep', subSteps: [], completed: false },
     ],
   },
   {
@@ -128,6 +130,8 @@ export const INITIAL_CONTAINERS: Container[] = [
     name: 'Personal',
     size: 'big',
     items: [
+      { id: 'per-vac', text: 'Vacuum seal winterwear', subSteps: [], completed: false },
+      { id: 'per-ac', text: 'Clean AC Units', subSteps: [], completed: false },
       {
         id: 'per-1',
         text: 'Update death doc',
@@ -165,6 +169,10 @@ export const INITIAL_CONTAINERS: Container[] = [
         completed: false,
       },
       { id: 'per-9', text: 'Libby sync', subSteps: [], completed: false },
+      { id: 'per-10', text: 'Robo vac schedule', subSteps: [], completed: false },
+      { id: 'per-11', text: 'Video doorbell', subSteps: [], completed: false },
+      { id: 'per-12', text: 'Car registration appt', subSteps: [], completed: false },
+      { id: 'per-13', text: 'Organize playroom', subSteps: [], completed: false },
     ],
   },
   {
