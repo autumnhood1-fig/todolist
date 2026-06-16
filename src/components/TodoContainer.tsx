@@ -4,12 +4,15 @@ import type { ContainerColor } from '../colors';
 import { TodoItemRow } from './TodoItemRow';
 import { AddItemForm } from './AddItemForm';
 
+const DIVIDER_ID = '__divider__';
+
 interface Props {
   container: Container;
   color: ContainerColor;
   onToggleItem: (itemId: string) => void;
   onToggleSubStep: (itemId: string, subStepId: string) => void;
   onAddItem: (item: Omit<TodoItem, 'id' | 'completed' | 'completedAt'>) => void;
+  onReorderItems: (newItems: TodoItem[], newDividerIndex: number) => void;
 }
 
 function Chevron({ collapsed, color }: { collapsed: boolean; color: string }) {
@@ -29,18 +32,112 @@ function Chevron({ collapsed, color }: { collapsed: boolean; color: string }) {
   );
 }
 
-export function TodoContainer({ container, color, onToggleItem, onToggleSubStep, onAddItem }: Props) {
+function GripIcon() {
+  return (
+    <svg viewBox="0 0 8 12" className="w-2 h-3 fill-current">
+      <circle cx="2" cy="2"  r="1.5" />
+      <circle cx="6" cy="2"  r="1.5" />
+      <circle cx="2" cy="6"  r="1.5" />
+      <circle cx="6" cy="6"  r="1.5" />
+      <circle cx="2" cy="10" r="1.5" />
+      <circle cx="6" cy="10" r="1.5" />
+    </svg>
+  );
+}
+
+export function TodoContainer({ container, color, onToggleItem, onToggleSubStep, onAddItem, onReorderItems }: Props) {
   const [collapsed, setCollapsed] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>(
     () => Object.fromEntries((container.sections ?? []).map(s => [s.id, true]))
   );
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [dropTargetId, setDropTargetId] = useState<string | null>(null);
 
   const activeItems = container.items.filter(i => !i.completed);
   const completedItems = container.items.filter(i => i.completed);
 
+  const dividerIndex = Math.min(container.dividerIndex ?? 1, activeItems.length);
+  const aboveItems = activeItems.slice(0, dividerIndex);
+  const belowItems = activeItems.slice(dividerIndex);
+
+  const sortableIds = [
+    ...aboveItems.map(i => i.id),
+    DIVIDER_ID,
+    ...belowItems.map(i => i.id),
+  ];
+
+  function handleDragStart(id: string, e: React.DragEvent) {
+    setDraggedId(id);
+    e.dataTransfer.effectAllowed = 'move';
+  }
+
+  function handleDragOver(targetId: string, e: React.DragEvent) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (targetId !== draggedId) setDropTargetId(targetId);
+  }
+
+  function handleDrop(targetId: string) {
+    if (!draggedId || draggedId === targetId) { cleanup(); return; }
+
+    const from = sortableIds.indexOf(draggedId);
+    const to = sortableIds.indexOf(targetId);
+    if (from === -1 || to === -1) { cleanup(); return; }
+
+    const newIds = [...sortableIds];
+    newIds.splice(from, 1);
+    newIds.splice(from < to ? to - 1 : to, 0, draggedId);
+
+    const newDividerIndex = newIds.indexOf(DIVIDER_ID);
+    const newItemIds = newIds.filter(id => id !== DIVIDER_ID);
+    const itemMap = Object.fromEntries(activeItems.map(i => [i.id, i]));
+    const newActiveItems = newItemIds.map(id => itemMap[id]);
+
+    onReorderItems([...newActiveItems, ...completedItems], newDividerIndex);
+    cleanup();
+  }
+
+  function cleanup() {
+    setDraggedId(null);
+    setDropTargetId(null);
+  }
+
   function toggleSection(sectionId: string) {
     setCollapsedSections(prev => ({ ...prev, [sectionId]: !prev[sectionId] }));
+  }
+
+  function renderItem(item: TodoItem, isBelow: boolean, hasBorderBottom: boolean) {
+    const isDragging = draggedId === item.id;
+    const isDropTarget = dropTargetId === item.id && !isDragging;
+
+    return (
+      <div
+        key={item.id}
+        draggable
+        onDragStart={(e) => handleDragStart(item.id, e)}
+        onDragOver={(e) => handleDragOver(item.id, e)}
+        onDrop={() => handleDrop(item.id)}
+        onDragEnd={cleanup}
+        className={`relative group/drag transition-opacity ${hasBorderBottom ? 'border-b border-stone-50' : ''} ${isDragging ? 'opacity-30' : 'opacity-100'}`}
+        style={isDropTarget ? { borderTop: `2px solid ${color.accent}` } : undefined}
+      >
+        {/* 6-dot grip handle, right edge, appears on hover */}
+        <div
+          className="absolute right-0 inset-y-0 w-5 flex items-center justify-center opacity-0 group-hover/drag:opacity-25 cursor-grab active:cursor-grabbing text-stone-400 pointer-events-none"
+        >
+          <GripIcon />
+        </div>
+
+        <TodoItemRow
+          item={item}
+          accentColor={color.accent}
+          isBelow={isBelow}
+          onToggle={() => onToggleItem(item.id)}
+          onToggleSubStep={(subId) => onToggleSubStep(item.id, subId)}
+        />
+      </div>
+    );
   }
 
   return (
@@ -81,16 +178,31 @@ export function TodoContainer({ container, color, onToggleItem, onToggleSubStep,
               <p className="py-5 text-xs text-stone-300 text-center">No tasks yet</p>
             )}
 
-            {activeItems.map((item, i) => (
-              <div key={item.id} className={i < activeItems.length - 1 ? 'border-b border-stone-50' : ''}>
-                <TodoItemRow
-                  item={item}
-                  accentColor={color.accent}
-                  onToggle={() => onToggleItem(item.id)}
-                  onToggleSubStep={(subId) => onToggleSubStep(item.id, subId)}
-                />
-              </div>
-            ))}
+            {activeItems.length > 0 && (
+              <>
+                {aboveItems.map((item, i) => renderItem(item, false, i < aboveItems.length - 1))}
+
+                {/* Divider */}
+                <div
+                  onDragOver={(e) => handleDragOver(DIVIDER_ID, e)}
+                  onDrop={() => handleDrop(DIVIDER_ID)}
+                  className="flex items-center gap-2 py-1 select-none"
+                  style={dropTargetId === DIVIDER_ID && draggedId !== DIVIDER_ID
+                    ? { borderTop: `2px solid ${color.accent}` }
+                    : undefined}
+                >
+                  <div className="flex-1 h-px" style={{ backgroundColor: `${color.accent}40` }} />
+                  <div className="flex gap-[3px] items-center">
+                    <div className="w-[2px] h-3 rounded-full" style={{ backgroundColor: `${color.accent}60` }} />
+                    <div className="w-[2px] h-3 rounded-full" style={{ backgroundColor: `${color.accent}60` }} />
+                    <div className="w-[2px] h-3 rounded-full" style={{ backgroundColor: `${color.accent}60` }} />
+                  </div>
+                  <div className="flex-1 h-px" style={{ backgroundColor: `${color.accent}40` }} />
+                </div>
+
+                {belowItems.map((item, i) => renderItem(item, true, i < belowItems.length - 1))}
+              </>
+            )}
 
             {completedItems.length > 0 && (
               <div className={activeItems.length > 0 ? 'border-t border-stone-100 mt-1 pt-1' : ''}>

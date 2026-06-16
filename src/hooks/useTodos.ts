@@ -80,5 +80,11 @@ export function useTodos() {
     updateItems(containerId, items => [...items, newItem]);
   }
 
-  return { containers, toggleItem, toggleSubStep, addItem };
+  function reorderItems(containerId: string, newItems: TodoItem[], newDividerIndex: number) {
+    setContainers(prev =>
+      prev.map(c => c.id === containerId ? { ...c, items: newItems, dividerIndex: newDividerIndex } : c)
+    );
+  }
+
+  return { containers, toggleItem, toggleSubStep, addItem, reorderItems };
 }

@@ -3,11 +3,12 @@ import type { TodoItem } from '../types';
 interface Props {
   item: TodoItem;
   accentColor: string;
+  isBelow?: boolean;
   onToggle: () => void;
   onToggleSubStep: (subStepId: string) => void;
 }
 
-export function TodoItemRow({ item, accentColor, onToggle, onToggleSubStep }: Props) {
+export function TodoItemRow({ item, accentColor, isBelow, onToggle, onToggleSubStep }: Props) {
   return (
     <div className="py-1.5">
       <div className="flex items-start gap-3">
@@ -36,8 +37,12 @@ export function TodoItemRow({ item, accentColor, onToggle, onToggleSubStep }: Pr
         </button>
 
         <span
-          className={`text-sm font-medium leading-snug ${
-            item.completed ? 'line-through text-stone-400' : 'text-stone-800'
+          className={`text-sm leading-snug ${
+            item.completed
+              ? 'line-through text-stone-400 font-medium'
+              : isBelow
+                ? 'font-normal text-stone-400'
+                : 'font-medium text-stone-800'
           }`}
         >
           {item.text}

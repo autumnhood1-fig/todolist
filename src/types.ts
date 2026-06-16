@@ -30,4 +30,5 @@ export interface Container {
   size: 'big' | 'medium';
   items: TodoItem[];
   sections?: ContainerSection[];
+  dividerIndex?: number;
 }
