@@ -1,5 +1,6 @@
 import { useTodos } from './hooks/useTodos';
 import { TodoContainer } from './components/TodoContainer';
+import { getColor } from './colors';
 import type { Container, TodoItem } from './types';
 
 const DATE_OPTS: Intl.DateTimeFormatOptions = {
@@ -9,10 +10,10 @@ const DATE_OPTS: Intl.DateTimeFormatOptions = {
 };
 
 const ROWS: { ids: string[]; cols: string }[] = [
-  { ids: ['calls', 'otelier', 'chores'],         cols: 'grid-cols-1 lg:grid-cols-3' },
-  { ids: ['personal', 'health'],                 cols: 'grid-cols-1 md:grid-cols-2' },
-  { ids: ['unt', 'finances', 'travel'],          cols: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' },
-  { ids: ['to-buy', 'writing'],                  cols: 'grid-cols-1 sm:grid-cols-2' },
+  { ids: ['calls', 'otelier', 'chores'],        cols: 'grid-cols-1 lg:grid-cols-3' },
+  { ids: ['personal', 'health'],                cols: 'grid-cols-1 md:grid-cols-2' },
+  { ids: ['unt', 'finances', 'travel'],         cols: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' },
+  { ids: ['to-buy', 'writing'],                 cols: 'grid-cols-1 sm:grid-cols-2' },
 ];
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
       <TodoContainer
         key={c.id}
         container={c}
+        color={getColor(c.id)}
         onToggleItem={(itemId) => toggleItem(c.id, itemId)}
         onToggleSubStep={(itemId, subId) => toggleSubStep(c.id, itemId, subId)}
         onAddItem={(item: Omit<TodoItem, 'id' | 'completed' | 'completedAt'>) => addItem(c.id, item)}
@@ -33,7 +35,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-dvh bg-stone-50 px-4 py-8 md:px-8">
+    <div className="min-h-dvh bg-stone-50 px-3 py-8 md:px-5">
       <div className="max-w-6xl mx-auto">
         <header className="mb-8">
           <h1 className="text-2xl font-bold text-stone-800 tracking-tight">My Tasks</h1>

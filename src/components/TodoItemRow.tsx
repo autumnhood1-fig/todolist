@@ -2,21 +2,23 @@ import type { TodoItem } from '../types';
 
 interface Props {
   item: TodoItem;
+  accentColor: string;
   onToggle: () => void;
   onToggleSubStep: (subStepId: string) => void;
 }
 
-export function TodoItemRow({ item, onToggle, onToggleSubStep }: Props) {
+export function TodoItemRow({ item, accentColor, onToggle, onToggleSubStep }: Props) {
   return (
     <div className="py-2.5">
       <div className="flex items-start gap-3">
         <button
           onClick={onToggle}
-          className={`mt-0.5 shrink-0 w-[18px] h-[18px] rounded border-2 flex items-center justify-center transition-colors ${
+          className="mt-0.5 shrink-0 w-[18px] h-[18px] rounded border-2 flex items-center justify-center transition-colors"
+          style={
             item.completed
-              ? 'border-stone-400 bg-stone-400'
-              : 'border-stone-300 hover:border-stone-500'
-          }`}
+              ? { backgroundColor: accentColor, borderColor: accentColor }
+              : { borderColor: '#d6d3d1' }
+          }
           aria-label={item.completed ? 'Mark incomplete' : 'Mark complete'}
         >
           {item.completed && (
@@ -53,11 +55,12 @@ export function TodoItemRow({ item, onToggle, onToggleSubStep }: Props) {
                 <li key={sub.id} className="flex items-center gap-2">
                   <button
                     onClick={() => onToggleSubStep(sub.id)}
-                    className={`shrink-0 w-3.5 h-3.5 rounded-sm border-2 flex items-center justify-center transition-colors ${
+                    className="shrink-0 w-3.5 h-3.5 rounded-sm border-2 flex items-center justify-center transition-colors"
+                    style={
                       sub.completed
-                        ? 'border-stone-400 bg-stone-400'
-                        : 'border-stone-300 hover:border-stone-400'
-                    }`}
+                        ? { backgroundColor: accentColor, borderColor: accentColor }
+                        : { borderColor: '#d6d3d1' }
+                    }
                     aria-label={sub.completed ? 'Mark incomplete' : 'Mark complete'}
                   >
                     {sub.completed && (
@@ -73,11 +76,7 @@ export function TodoItemRow({ item, onToggle, onToggleSubStep }: Props) {
                       </svg>
                     )}
                   </button>
-                  <span
-                    className={`text-xs leading-snug ${
-                      sub.completed ? 'line-through text-stone-400' : 'text-stone-600'
-                    }`}
-                  >
+                  <span className={`text-xs leading-snug ${sub.completed ? 'line-through text-stone-400' : 'text-stone-600'}`}>
                     {sub.text}
                   </span>
                 </li>
