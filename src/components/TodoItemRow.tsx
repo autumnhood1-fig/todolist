@@ -6,9 +6,10 @@ interface Props {
   isBelow?: boolean;
   onToggle: () => void;
   onToggleSubStep: (subStepId: string) => void;
+  onTagEvan?: () => void;
 }
 
-export function TodoItemRow({ item, accentColor, isBelow, onToggle, onToggleSubStep }: Props) {
+export function TodoItemRow({ item, accentColor, isBelow, onToggle, onToggleSubStep, onTagEvan }: Props) {
   return (
     <div className="py-1.5">
       <div className="flex items-start gap-3">
@@ -37,7 +38,7 @@ export function TodoItemRow({ item, accentColor, isBelow, onToggle, onToggleSubS
         </button>
 
         <span
-          className={`text-sm leading-snug ${
+          className={`flex-1 text-sm leading-snug ${
             item.completed
               ? 'line-through text-stone-400 font-medium'
               : isBelow
@@ -47,6 +48,20 @@ export function TodoItemRow({ item, accentColor, isBelow, onToggle, onToggleSubS
         >
           {item.text}
         </span>
+
+        {!item.completed && onTagEvan && (
+          <button
+            onClick={(e) => { e.stopPropagation(); onTagEvan(); }}
+            className={`shrink-0 self-start mt-0.5 text-[10px] font-medium px-1.5 py-0.5 rounded-full border transition-all duration-150 ${
+              item.evan
+                ? 'opacity-100 bg-blue-50 border-blue-200 text-blue-500'
+                : 'opacity-0 group-hover/drag:opacity-50 bg-transparent border-stone-200 text-stone-400 hover:!opacity-100'
+            }`}
+            aria-label={item.evan ? 'Remove Evan tag' : 'Tag for Evan'}
+          >
+            Evan
+          </button>
+        )}
       </div>
 
       {(item.details || item.subSteps.length > 0) && (

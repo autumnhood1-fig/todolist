@@ -13,6 +13,7 @@ interface Props {
   onToggleSubStep: (itemId: string, subStepId: string) => void;
   onAddItem: (item: Omit<TodoItem, 'id' | 'completed' | 'completedAt'>) => void;
   onAddSubStep: (itemId: string, text: string) => void;
+  onTagEvan: (itemId: string) => void;
   onReorderItems: (newItems: TodoItem[], newDividerIndex: number) => void;
 }
 
@@ -46,7 +47,7 @@ function GripIcon() {
   );
 }
 
-export function TodoContainer({ container, color, onToggleItem, onToggleSubStep, onAddItem, onAddSubStep, onReorderItems }: Props) {
+export function TodoContainer({ container, color, onToggleItem, onToggleSubStep, onAddItem, onAddSubStep, onTagEvan, onReorderItems }: Props) {
   const [collapsed, setCollapsed] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>(
@@ -136,6 +137,7 @@ export function TodoContainer({ container, color, onToggleItem, onToggleSubStep,
           isBelow={isBelow}
           onToggle={() => onToggleItem(item.id)}
           onToggleSubStep={(subId) => onToggleSubStep(item.id, subId)}
+          onTagEvan={() => onTagEvan(item.id)}
         />
       </div>
     );

@@ -109,6 +109,12 @@ export function useTodos() {
     updateItems(containerId, items => [...items, newItem]);
   }
 
+  function tagEvan(containerId: string, itemId: string) {
+    updateItems(containerId, items =>
+      items.map(item => item.id === itemId ? { ...item, evan: !item.evan } : item)
+    );
+  }
+
   function addSubStep(containerId: string, itemId: string, text: string) {
     const newSubStep: SubStep = { id: crypto.randomUUID(), text, completed: false };
     updateItems(containerId, items =>
@@ -124,5 +130,5 @@ export function useTodos() {
     );
   }
 
-  return { containers, toggleItem, toggleSubStep, addItem, addSubStep, reorderItems };
+  return { containers, toggleItem, toggleSubStep, addItem, addSubStep, tagEvan, reorderItems };
 }

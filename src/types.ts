@@ -11,6 +11,7 @@ export interface TodoItem {
   subSteps: SubStep[];
   completed: boolean;
   completedAt?: number;
+  evan?: boolean;
 }
 
 export interface SectionItem {
