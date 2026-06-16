@@ -85,12 +85,6 @@ export const INITIAL_CONTAINERS: Container[] = [
     ],
   },
   {
-    id: 'house',
-    name: 'House',
-    size: 'big',
-    items: [],
-  },
-  {
     id: 'personal',
     name: 'Personal',
     size: 'big',
