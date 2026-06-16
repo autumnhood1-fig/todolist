@@ -84,6 +84,7 @@ export const INITIAL_CONTAINERS: Container[] = [
     name: 'Chores',
     size: 'big',
     items: [
+      { id: 'ch-0', text: 'Pay water bill', subSteps: [], completed: false },
       { id: 'ch-1', text: 'Daily chore print', subSteps: [], completed: false },
       { id: 'ch-2', text: 'Clean up computer', subSteps: [], completed: false },
       { id: 'ch-3', text: 'Clean out fridge', subSteps: [], completed: false },
