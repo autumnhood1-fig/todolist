@@ -13,9 +13,21 @@ export interface TodoItem {
   completedAt?: number;
 }
 
+export interface SectionItem {
+  id: string;
+  text: string;
+}
+
+export interface ContainerSection {
+  id: string;
+  label: string;
+  items: SectionItem[];
+}
+
 export interface Container {
   id: string;
   name: string;
   size: 'big' | 'medium';
   items: TodoItem[];
+  sections?: ContainerSection[];
 }

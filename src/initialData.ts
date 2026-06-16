@@ -6,12 +6,7 @@ export const INITIAL_CONTAINERS: Container[] = [
     name: 'Places to Call / Email',
     size: 'big',
     items: [
-      {
-        id: 'call-1',
-        text: 'Cadence Academy',
-        subSteps: [],
-        completed: false,
-      },
+      { id: 'call-1', text: 'Cadence Academy', subSteps: [], completed: false },
       {
         id: 'call-2',
         text: 'Anthem – Brown Health Bill',
@@ -19,24 +14,12 @@ export const INITIAL_CONTAINERS: Container[] = [
         subSteps: [],
         completed: false,
       },
-      {
-        id: 'call-3',
-        text: 'Rheumatology',
-        subSteps: [],
-        completed: false,
-      },
-      {
-        id: 'call-4',
-        text: 'Sleep Study',
-        subSteps: [],
-        completed: false,
-      },
-      {
-        id: 'call-5',
-        text: 'Dr. Lasher – Hematology',
-        subSteps: [],
-        completed: false,
-      },
+      { id: 'call-3', text: 'Rheumatology', subSteps: [], completed: false },
+      { id: 'call-4', text: 'Sleep Study', subSteps: [], completed: false },
+      { id: 'call-5', text: 'Dr. Lasher – Hematology', subSteps: [], completed: false },
+      { id: 'call-6', text: "Cancel Cloaked – tell them it's not working", subSteps: [], completed: false },
+      { id: 'call-7', text: 'UNT Payroll', subSteps: [], completed: false },
+      { id: 'call-8', text: 'RI Insurance agent once registered', subSteps: [], completed: false },
     ],
   },
   {
@@ -44,6 +27,10 @@ export const INITIAL_CONTAINERS: Container[] = [
     name: 'Otelier',
     size: 'big',
     items: [
+      { id: 'ot-1', text: 'Print Project sheet', subSteps: [], completed: false },
+      { id: 'ot-2', text: 'FSAD skills / agent', subSteps: [], completed: false },
+      { id: 'ot-3', text: 'FSAD Demo prep w/ Ishara', subSteps: [], completed: false },
+      { id: 'ot-4', text: 'MCR fix Giftshop', subSteps: [], completed: false },
       {
         id: 'sys-manager',
         text: 'System Manager redesign',
@@ -70,12 +57,32 @@ export const INITIAL_CONTAINERS: Container[] = [
         completed: false,
       },
     ],
+    sections: [
+      {
+        id: 'redesigns',
+        label: 'Redesigns (for later)',
+        items: [
+          { id: 'rd-1', text: 'DigiAudit, Rec, IntelliSight, TPX audit' },
+          { id: 'rd-2', text: 'Health center' },
+          { id: 'rd-3', text: 'Notification stack > between app notifs' },
+          { id: 'rd-4', text: 'CRM shift to SM' },
+        ],
+      },
+    ],
   },
   {
     id: 'chores',
     name: 'Chores',
     size: 'big',
-    items: [],
+    items: [
+      { id: 'ch-1', text: 'Daily chore print', subSteps: [], completed: false },
+      { id: 'ch-2', text: 'Clean up computer', subSteps: [], completed: false },
+      { id: 'ch-3', text: 'Clean out fridge', subSteps: [], completed: false },
+      { id: 'ch-4', text: 'Clean toilets', subSteps: [], completed: false },
+      { id: 'ch-5', text: 'Laundry', subSteps: [], completed: false },
+      { id: 'ch-6', text: 'Donation(s)', subSteps: [], completed: false },
+      { id: 'ch-7', text: 'School pack', subSteps: [], completed: false },
+    ],
   },
   {
     id: 'house',
@@ -84,16 +91,86 @@ export const INITIAL_CONTAINERS: Container[] = [
     items: [],
   },
   {
+    id: 'personal',
+    name: 'Personal',
+    size: 'big',
+    items: [
+      {
+        id: 'per-1',
+        text: 'Update death doc',
+        subSteps: [
+          { id: 'per-1-1', text: 'Transfer to Claude', completed: false },
+          { id: 'per-1-2', text: 'Update to include: Stessa, landlord accts, Allstate, healthcare, school daycares', completed: false },
+          { id: 'per-1-3', text: 'Print and send to Mom, B/Lee — keep a copy', completed: false },
+        ],
+        completed: false,
+      },
+      { id: 'per-2', text: 'Upload IG saves & screenshots to Claude and delete', subSteps: [], completed: false },
+      { id: 'per-3', text: 'Clean up online storage (iPhone, Evan\'s, drives — export to MixBook and DVDs as needed)', subSteps: [], completed: false },
+      { id: 'per-4', text: 'Start Xmas gifts – kids art Mixbook', subSteps: [], completed: false },
+      { id: 'per-5', text: 'Review IG following list and transfer to Claude', subSteps: [], completed: false },
+      { id: 'per-6', text: 'Add Niantic and recent IG saves to NE Bucket List', subSteps: [], completed: false },
+      {
+        id: 'per-7',
+        text: 'Skincare routine',
+        subSteps: [
+          { id: 'per-7-1', text: 'Determine a low and high routine', completed: false },
+          { id: 'per-7-2', text: 'Print email attachment', completed: false },
+          { id: 'per-7-3', text: 'Print steps', completed: false },
+          { id: 'per-7-4', text: 'Buy products needed', completed: false },
+        ],
+        completed: false,
+      },
+      {
+        id: 'per-8',
+        text: 'Set up Minimals phone',
+        subSteps: [
+          { id: 'per-8-1', text: 'Charge phone', completed: false },
+          { id: 'per-8-2', text: 'Find walk-through video', completed: false },
+          { id: 'per-8-3', text: 'Prepare to go to T-Mobile', completed: false },
+        ],
+        completed: false,
+      },
+    ],
+  },
+  {
     id: 'unt',
     name: 'UNT',
     size: 'medium',
-    items: [],
+    items: [
+      { id: 'unt-1', text: "Read Teagan's articles", subSteps: [], completed: false },
+      { id: 'unt-2', text: 'Add checklist items here', subSteps: [], completed: false },
+      { id: 'unt-3', text: 'Memo grading web app', subSteps: [], completed: false },
+      { id: 'unt-4', text: 'Memo video assignments', subSteps: [], completed: false },
+    ],
   },
   {
     id: 'health',
     name: 'Health',
     size: 'medium',
-    items: [],
+    items: [
+      {
+        id: 'hlth-1',
+        text: 'Build easy recipe library from IG – maybe do the freezer thing',
+        subSteps: [
+          { id: 'hlth-1-1', text: 'Figure out how Claude can support – saving recipes, agentic push to Instacart', completed: false },
+          { id: 'hlth-1-2', text: 'Find one or two recipes from Instagram and add', completed: false },
+        ],
+        completed: false,
+      },
+      {
+        id: 'hlth-2',
+        text: 'Glucose monitoring',
+        subSteps: [
+          { id: 'hlth-2-1', text: 'Review purchases in Gmail', completed: false },
+          { id: 'hlth-2-2', text: 'Buy equipment needed', completed: false },
+          { id: 'hlth-2-3', text: 'Add to checklists / daily routines as needed', completed: false },
+        ],
+        completed: false,
+      },
+      { id: 'hlth-3', text: 'Print simple IG workout & mobility/stretch routine', subSteps: [], completed: false },
+      { id: 'hlth-4', text: 'Autoimmune / chronic conditions from IG', subSteps: [], completed: false },
+    ],
   },
   {
     id: 'finances',
@@ -108,18 +185,8 @@ export const INITIAL_CONTAINERS: Container[] = [
         ],
         completed: false,
       },
-      {
-        id: 'fin-2',
-        text: "Add Autumn to Evan's Chase acct",
-        subSteps: [],
-        completed: false,
-      },
-      {
-        id: 'fin-3',
-        text: "Close Autumn's Chase acct",
-        subSteps: [],
-        completed: false,
-      },
+      { id: 'fin-2', text: "Add Autumn to Evan's Chase acct", subSteps: [], completed: false },
+      { id: 'fin-3', text: "Close Autumn's Chase acct", subSteps: [], completed: false },
     ],
   },
   {
@@ -127,24 +194,28 @@ export const INITIAL_CONTAINERS: Container[] = [
     name: 'Travel',
     size: 'medium',
     items: [
-      {
-        id: 'tr-1',
-        text: 'Buy NY train tickets',
-        subSteps: [],
-        completed: false,
-      },
-      {
-        id: 'tr-2',
-        text: 'Book NY lodging',
-        subSteps: [],
-        completed: false,
-      },
-      {
-        id: 'tr-3',
-        text: 'Pre-purchase NY attractions (Groupons, City Pass, etc.)',
-        subSteps: [],
-        completed: false,
-      },
+      { id: 'tr-1', text: 'Buy NY train tickets', subSteps: [], completed: false },
+      { id: 'tr-2', text: 'Book NY lodging', subSteps: [], completed: false },
+      { id: 'tr-3', text: 'Pre-purchase NY attractions (Groupons, City Pass, etc.)', subSteps: [], completed: false },
+      { id: 'tr-4', text: 'Update address on any flights after move date', subSteps: [], completed: false },
+      { id: 'tr-5', text: 'Call AA / Delta etc. to change address on upcoming tickets', subSteps: [], completed: false },
+      { id: 'tr-6', text: "Update everyone's AA / Delta address", subSteps: [], completed: false },
+    ],
+  },
+  {
+    id: 'to-buy',
+    name: 'To Buy',
+    size: 'medium',
+    items: [
+      { id: 'buy-1', text: 'Warm bulbs for guest room', subSteps: [], completed: false },
+    ],
+  },
+  {
+    id: 'writing',
+    name: 'Writing',
+    size: 'medium',
+    items: [
+      { id: 'writ-1', text: 'Write first draft of Armadillo', subSteps: [], completed: false },
     ],
   },
 ];

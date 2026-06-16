@@ -10,16 +10,39 @@ interface Props {
   onAddItem: (item: Omit<TodoItem, 'id' | 'completed' | 'completedAt'>) => void;
 }
 
+function Chevron({ collapsed, className }: { collapsed: boolean; className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      className={`transition-transform duration-150 ${collapsed ? '-rotate-90' : ''} ${className ?? ''}`}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="4,6 8,10 12,6" />
+    </svg>
+  );
+}
+
 export function TodoContainer({ container, onToggleItem, onToggleSubStep, onAddItem }: Props) {
   const [collapsed, setCollapsed] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
+  const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>(
+    () => Object.fromEntries((container.sections ?? []).map(s => [s.id, true]))
+  );
 
   const activeItems = container.items.filter(i => !i.completed);
   const completedItems = container.items.filter(i => i.completed);
 
+  function toggleSection(sectionId: string) {
+    setCollapsedSections(prev => ({ ...prev, [sectionId]: !prev[sectionId] }));
+  }
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 flex flex-col">
-      {/* Header — always visible, click to collapse */}
+      {/* Container header — click to collapse entire container */}
       <button
         onClick={() => { setCollapsed(c => !c); if (!collapsed) setShowAdd(false); }}
         className="flex items-center justify-between px-4 pt-4 pb-3 border-b border-stone-100 text-left w-full group"
@@ -31,17 +54,7 @@ export function TodoContainer({ container, onToggleItem, onToggleSubStep, onAddI
           {activeItems.length > 0 && (
             <span className="text-xs text-stone-400">{activeItems.length} left</span>
           )}
-          <svg
-            viewBox="0 0 16 16"
-            className={`w-3.5 h-3.5 text-stone-300 group-hover:text-stone-500 transition-all duration-150 ${collapsed ? '-rotate-90' : ''}`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="4,6 8,10 12,6" />
-          </svg>
+          <Chevron collapsed={collapsed} className="w-3.5 h-3.5 text-stone-300 group-hover:text-stone-500" />
         </div>
       </button>
 
@@ -49,7 +62,7 @@ export function TodoContainer({ container, onToggleItem, onToggleSubStep, onAddI
       {!collapsed && (
         <>
           <div className="flex-1 px-4">
-            {activeItems.length === 0 && completedItems.length === 0 && !showAdd && (
+            {activeItems.length === 0 && completedItems.length === 0 && !showAdd && !container.sections?.length && (
               <p className="py-5 text-xs text-stone-300 text-center">No tasks yet</p>
             )}
 
@@ -65,9 +78,7 @@ export function TodoContainer({ container, onToggleItem, onToggleSubStep, onAddI
 
             {completedItems.length > 0 && (
               <div className={activeItems.length > 0 ? 'border-t border-stone-100 mt-1 pt-1' : ''}>
-                <p className="text-[10px] uppercase tracking-widest text-stone-300 pt-2 pb-0.5">
-                  Done
-                </p>
+                <p className="text-[10px] uppercase tracking-widest text-stone-300 pt-2 pb-0.5">Done</p>
                 {completedItems.map(item => (
                   <div key={item.id}>
                     <TodoItemRow
@@ -80,12 +91,35 @@ export function TodoContainer({ container, onToggleItem, onToggleSubStep, onAddI
               </div>
             )}
 
+            {/* Collapsible sections (e.g. "Redesigns for later") */}
+            {container.sections?.map(section => (
+              <div key={section.id} className="border-t border-stone-100 mt-2">
+                <button
+                  onClick={() => toggleSection(section.id)}
+                  className="w-full flex items-center justify-between py-2 text-left group"
+                >
+                  <span className="text-xs text-stone-400 font-medium italic">{section.label}</span>
+                  <Chevron
+                    collapsed={collapsedSections[section.id] ?? true}
+                    className="w-3 h-3 text-stone-300 group-hover:text-stone-500"
+                  />
+                </button>
+                {!collapsedSections[section.id] && (
+                  <ul className="pb-3 space-y-1.5">
+                    {section.items.map(item => (
+                      <li key={item.id} className="flex items-start gap-2 text-xs text-stone-500">
+                        <span className="text-stone-300 shrink-0 mt-0.5">·</span>
+                        {item.text}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+
             {showAdd && (
               <AddItemForm
-                onAdd={(item) => {
-                  onAddItem(item);
-                  setShowAdd(false);
-                }}
+                onAdd={(item) => { onAddItem(item); setShowAdd(false); }}
                 onCancel={() => setShowAdd(false)}
               />
             )}
