@@ -3,31 +3,56 @@ import type { Container, TodoItem, SubStep } from '../types';
 import { INITIAL_CONTAINERS } from '../initialData';
 
 const STORAGE_KEY = 'todos-v5';
+const DISMISSED_KEY = 'todos-dismissed-v1'; // IDs of items that were completed and purged — never re-seed these
 const EXPIRY_MS = 48 * 60 * 60 * 1000;
 
+function getDismissedIds(): Set<string> {
+  try {
+    const raw = localStorage.getItem(DISMISSED_KEY);
+    return new Set(raw ? (JSON.parse(raw) as string[]) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function recordDismissed(ids: string[]) {
+  if (!ids.length) return;
+  const existing = getDismissedIds();
+  ids.forEach(id => existing.add(id));
+  localStorage.setItem(DISMISSED_KEY, JSON.stringify([...existing]));
+}
+
+// Remove completed items older than 48 hrs, recording their IDs so they never come back
 function purgeExpired(containers: Container[]): Container[] {
   const now = Date.now();
-  return containers.map(c => ({
+  const purgedIds: string[] = [];
+
+  const result = containers.map(c => ({
     ...c,
     items: c.items.filter(item => {
       if (!item.completed) return true;
-      if (!item.completedAt) return false;
-      return now - item.completedAt < EXPIRY_MS;
+      const expired = !item.completedAt || now - item.completedAt >= EXPIRY_MS;
+      if (expired) purgedIds.push(item.id);
+      return !expired;
     }),
   }));
+
+  recordDismissed(purgedIds);
+  return result;
 }
 
-// Add containers from initialData that don't exist in saved data yet
+// Add whole containers from initialData that aren't in saved data yet
 function mergeNewContainers(saved: Container[]): Container[] {
   const savedIds = new Set(saved.map(c => c.id));
   const newContainers = INITIAL_CONTAINERS.filter(c => !savedIds.has(c.id));
   return [...saved, ...newContainers];
 }
 
-// Add items/sections from initialData that don't exist in saved containers yet.
-// This means adding a new item to initialData.ts will automatically appear in the
-// user's browser without wiping their drag order, completions, or custom-added items.
+// Add items/sections from initialData that don't exist yet AND haven't been dismissed.
+// This lets me add items to initialData.ts and have them auto-appear without wiping
+// the user's drag order, completions, or custom-added items.
 function mergeNewItems(saved: Container[]): Container[] {
+  const dismissed = getDismissedIds();
   const initialMap = Object.fromEntries(INITIAL_CONTAINERS.map(c => [c.id, c]));
 
   return saved.map(savedContainer => {
@@ -35,7 +60,7 @@ function mergeNewItems(saved: Container[]): Container[] {
     if (!initial) return savedContainer;
 
     const savedItemIds = new Set(savedContainer.items.map(i => i.id));
-    const newItems = initial.items.filter(i => !savedItemIds.has(i.id));
+    const newItems = initial.items.filter(i => !savedItemIds.has(i.id) && !dismissed.has(i.id));
 
     const savedSectionIds = new Set((savedContainer.sections ?? []).map(s => s.id));
     const newSections = (initial.sections ?? []).filter(s => !savedSectionIds.has(s.id));
@@ -81,6 +106,10 @@ export function useTodos() {
       items.map(item => {
         if (item.id !== itemId) return item;
         if (item.completed) {
+          // Un-checking: remove from dismissed set so it can be re-added if needed
+          const dismissed = getDismissedIds();
+          dismissed.delete(itemId);
+          localStorage.setItem(DISMISSED_KEY, JSON.stringify([...dismissed]));
           return { ...item, completed: false, completedAt: undefined };
         }
         return { ...item, completed: true, completedAt: Date.now() };
