@@ -17,7 +17,7 @@ const ROWS: { ids: string[]; cols: string }[] = [
 ];
 
 export default function App() {
-  const { containers, toggleItem, toggleSubStep, addItem, reorderItems } = useTodos();
+  const { containers, toggleItem, toggleSubStep, addItem, addSubStep, reorderItems } = useTodos();
 
   const byId = Object.fromEntries(containers.map(c => [c.id, c]));
 
@@ -30,6 +30,7 @@ export default function App() {
         onToggleItem={(itemId) => toggleItem(c.id, itemId)}
         onToggleSubStep={(itemId, subId) => toggleSubStep(c.id, itemId, subId)}
         onAddItem={(item: Omit<TodoItem, 'id' | 'completed' | 'completedAt'>) => addItem(c.id, item)}
+        onAddSubStep={(itemId, text) => addSubStep(c.id, itemId, text)}
         onReorderItems={(newItems, newDividerIndex) => reorderItems(c.id, newItems, newDividerIndex)}
       />
     );
