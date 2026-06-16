@@ -82,6 +82,36 @@ export const INITIAL_CONTAINERS: Container[] = [
       { id: 'ch-5', text: 'Laundry', subSteps: [], completed: false },
       { id: 'ch-6', text: 'Donation(s)', subSteps: [], completed: false },
       { id: 'ch-7', text: 'School pack', subSteps: [], completed: false },
+      {
+        id: 'ch-8', text: "Auggie's room", completed: false,
+        subSteps: [
+          { id: 'ch-8-1', text: 'Hang pics', completed: false },
+          { id: 'ch-8-2', text: 'Blackout curtains', completed: false },
+          { id: 'ch-8-3', text: 'Remove coats', completed: false },
+        ],
+      },
+      {
+        id: 'ch-9', text: "Leo's room", completed: false,
+        subSteps: [
+          { id: 'ch-9-1', text: 'Remove coats', completed: false },
+        ],
+      },
+      {
+        id: 'ch-10', text: 'E&A room', completed: false,
+        subSteps: [
+          { id: 'ch-10-1', text: 'Blackout curtains', completed: false },
+          { id: 'ch-10-2', text: 'Jewelry', completed: false },
+          { id: 'ch-10-3', text: 'Declutter', completed: false },
+        ],
+      },
+      {
+        id: 'ch-11', text: 'Upper hallway', completed: false,
+        subSteps: [
+          { id: 'ch-11-1', text: 'Fix rugs', completed: false },
+        ],
+      },
+      { id: 'ch-12', text: 'Hang hallway pics', subSteps: [], completed: false },
+      { id: 'ch-13', text: 'Move kitty litter', subSteps: [], completed: false },
     ],
   },
   {
