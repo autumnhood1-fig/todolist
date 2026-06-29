@@ -11,10 +11,10 @@ const DATE_OPTS: Intl.DateTimeFormatOptions = {
 };
 
 const ROWS: { ids: string[]; cols: string }[] = [
-  { ids: ['chores', 'personal', 'otelier'],     cols: 'grid-cols-1 lg:grid-cols-3' },
-  { ids: ['calls', 'health', 'kids'],           cols: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' },
-  { ids: ['unt', 'travel', 'finances'],         cols: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' },
-  { ids: ['deep-cleaning', 'to-buy', 'writing'], cols: 'grid-cols-1 sm:grid-cols-3' },
+  { ids: ['personal', 'otelier'],               cols: 'grid-cols-1 lg:grid-cols-2' },
+  { ids: ['health', 'kids', 'unt'],             cols: 'grid-cols-1 md:grid-cols-3' },
+  { ids: ['travel', 'finances', 'writing'],     cols: 'grid-cols-1 sm:grid-cols-3' },
+  { ids: ['to-buy'],                            cols: 'grid-cols-1 sm:grid-cols-2' },
 ];
 
 export default function App() {

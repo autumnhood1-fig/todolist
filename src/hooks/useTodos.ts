@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Container, TodoItem, SubStep } from '../types';
 import { INITIAL_CONTAINERS } from '../initialData';
 
-const STORAGE_KEY = 'todos-v5';
+const STORAGE_KEY = 'todos-v6';
 const DISMISSED_KEY = 'todos-dismissed-v1'; // IDs of items that were completed and purged — never re-seed these
 const EXPIRY_MS = 48 * 60 * 60 * 1000;
 
