@@ -41,11 +41,14 @@ function purgeExpired(containers: Container[]): Container[] {
   return result;
 }
 
-// Add whole containers from initialData that aren't in saved data yet
+// Add whole containers from initialData that aren't in saved data yet,
+// and remove any saved containers that no longer exist in initialData.
 function mergeNewContainers(saved: Container[]): Container[] {
-  const savedIds = new Set(saved.map(c => c.id));
+  const validIds = new Set(INITIAL_CONTAINERS.map(c => c.id));
+  const filtered = saved.filter(c => validIds.has(c.id));
+  const savedIds = new Set(filtered.map(c => c.id));
   const newContainers = INITIAL_CONTAINERS.filter(c => !savedIds.has(c.id));
-  return [...saved, ...newContainers];
+  return [...filtered, ...newContainers];
 }
 
 // Add items/sections from initialData that don't exist yet AND haven't been dismissed.
