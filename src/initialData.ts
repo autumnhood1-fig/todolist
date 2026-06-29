@@ -40,10 +40,18 @@ export const INITIAL_CONTAINERS: Container[] = [
           { id: 'ot-fsad-4', text: 'Prism hosting', completed: false },
           { id: 'ot-fsad-5', text: 'Install g grid', completed: false },
           { id: 'ot-fsad-6', text: 'Install minimal UI', completed: false },
+          { id: 'ot-fsad-7', text: 'Apply style guides to guidelines documentation', completed: false },
         ],
         completed: false,
       },
       { id: 'ot-vai', text: 'VAI mapping (Nick)', subSteps: [], completed: false },
+      {
+        id: 'ot-agents', text: 'Agents', completed: false,
+        subSteps: [
+          { id: 'ot-agents-1', text: 'UX audit', completed: false },
+          { id: 'ot-agents-2', text: 'UX needs assessment', completed: false },
+        ],
+      },
       {
         id: 'ot-4', text: 'MCR fix Giftshop', completed: false,
         subSteps: [
