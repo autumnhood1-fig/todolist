@@ -51,9 +51,12 @@ function mergeNewContainers(saved: Container[]): Container[] {
   return [...filtered, ...newContainers];
 }
 
-// Add items/sections from initialData that don't exist yet AND haven't been dismissed.
-// This lets me add items to initialData.ts and have them auto-appear without wiping
-// the user's drag order, completions, or custom-added items.
+// UUID pattern — items added via the UI get crypto.randomUUID() IDs; seed items have short readable IDs.
+// We use this to distinguish user-added items (always keep) from seed items (purge if removed from initialData).
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-/i;
+
+// Sync items per container: remove seed items no longer in initialData, add new ones, merge new subSteps.
+// User-added items (UUID IDs) are always preserved.
 function mergeNewItems(saved: Container[]): Container[] {
   const dismissed = getDismissedIds();
   const initialMap = Object.fromEntries(INITIAL_CONTAINERS.map(c => [c.id, c]));
@@ -62,13 +65,21 @@ function mergeNewItems(saved: Container[]): Container[] {
     const initial = initialMap[savedContainer.id];
     if (!initial) return savedContainer;
 
-    const savedItemIds = new Set(savedContainer.items.map(i => i.id));
+    const initialItemIds = new Set(initial.items.map(i => i.id));
+    const initialItemMap = Object.fromEntries(initial.items.map(i => [i.id, i]));
+
+    // Drop seed items that were removed from initialData; keep user-added items always
+    const filteredItems = savedContainer.items.filter(item =>
+      UUID_PATTERN.test(item.id) || initialItemIds.has(item.id)
+    );
+
+    // Add new seed items not yet in saved state
+    const savedItemIds = new Set(filteredItems.map(i => i.id));
     const newItems = initial.items.filter(i => !savedItemIds.has(i.id) && !dismissed.has(i.id));
 
     // Merge new subSteps into existing items
-    const initialItemMap = Object.fromEntries(initial.items.map(i => [i.id, i]));
     let hasNewSubSteps = false;
-    const mergedItems = savedContainer.items.map(savedItem => {
+    const mergedItems = filteredItems.map(savedItem => {
       const initialItem = initialItemMap[savedItem.id];
       if (!initialItem) return savedItem;
       const savedSubIds = new Set(savedItem.subSteps.map(s => s.id));
@@ -81,7 +92,7 @@ function mergeNewItems(saved: Container[]): Container[] {
     const savedSectionIds = new Set((savedContainer.sections ?? []).map(s => s.id));
     const newSections = (initial.sections ?? []).filter(s => !savedSectionIds.has(s.id));
 
-    if (newItems.length === 0 && newSections.length === 0 && !hasNewSubSteps) return savedContainer;
+    if (newItems.length === 0 && newSections.length === 0 && !hasNewSubSteps && filteredItems.length === savedContainer.items.length) return savedContainer;
 
     return {
       ...savedContainer,
