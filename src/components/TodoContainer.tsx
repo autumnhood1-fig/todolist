@@ -133,7 +133,11 @@ export function TodoContainer({
         draggable
         onDragStart={(e) => handleDragStart(item.id, e)}
         onDragOver={(e) => handleDragOver(item.id, e)}
-        onDrop={(e) => { e.stopPropagation(); handleDrop(item.id); }}
+        onDrop={(e) => {
+          e.stopPropagation();
+          if (isExternalDragActive) { onReceiveExternalDrop(); setIsExternalDropTarget(false); }
+          else handleDrop(item.id);
+        }}
         onDragEnd={() => { cleanup(); onCrossDragEnd(); }}
         className={`relative group/drag transition-opacity ${hasBorderBottom ? 'border-b border-stone-50' : ''} ${isDragging ? 'opacity-30' : 'opacity-100'}`}
         style={isDropTarget ? { borderTop: `2px solid ${color.accent}` } : undefined}
@@ -224,7 +228,11 @@ export function TodoContainer({
                 {/* Divider */}
                 <div
                   onDragOver={(e) => handleDragOver(DIVIDER_ID, e)}
-                  onDrop={(e) => { e.stopPropagation(); handleDrop(DIVIDER_ID); }}
+                  onDrop={(e) => {
+                    e.stopPropagation();
+                    if (isExternalDragActive) { onReceiveExternalDrop(); setIsExternalDropTarget(false); }
+                    else handleDrop(DIVIDER_ID);
+                  }}
                   className="flex items-center gap-2 py-1 select-none"
                   style={dropTargetId === DIVIDER_ID && draggedId !== DIVIDER_ID
                     ? { borderTop: `2px solid ${color.accent}` }

@@ -21,6 +21,7 @@ export const INITIAL_CONTAINERS: Container[] = [
       { id: 'call-7', text: 'UNT Payroll', subSteps: [], completed: false },
       { id: 'call-8', text: 'RI Insurance agent once registered', subSteps: [], completed: false },
       { id: 'call-9', text: 'Anthem – Propanolol', subSteps: [], completed: false },
+      { id: 'call-10', text: 'Leo VG – supplies, teacher, orientation', subSteps: [], completed: false },
     ],
   },
   {
@@ -40,7 +41,12 @@ export const INITIAL_CONTAINERS: Container[] = [
         ],
         completed: false,
       },
-      { id: 'ot-4', text: 'MCR fix Giftshop', subSteps: [], completed: false },
+      {
+        id: 'ot-4', text: 'MCR fix Giftshop', completed: false,
+        subSteps: [
+          { id: 'ot-4-1', text: 'Mapping update', completed: false },
+        ],
+      },
       {
         id: 'sys-manager',
         text: 'System Manager redesign',
@@ -49,6 +55,7 @@ export const INITIAL_CONTAINERS: Container[] = [
           { id: 'sm-2', text: 'Usability test mockups', completed: false },
           { id: 'sm-3', text: 'Refine mocks based on feedback', completed: false },
           { id: 'sm-4', text: 'Readout presentation', completed: false },
+          { id: 'sm-5', text: 'Tree testing software', completed: false },
         ],
         completed: false,
       },
@@ -60,6 +67,7 @@ export const INITIAL_CONTAINERS: Container[] = [
           { id: 'ob-2', text: 'Map Section L', completed: false },
           { id: 'ob-3', text: 'Map Piatt', completed: false },
           { id: 'ob-4', text: 'Map Fess Parker', completed: false },
+          { id: 'ob-4b', text: 'Fess Parker mapping update', completed: false },
           { id: 'ob-5', text: 'Map VAI', completed: false },
           { id: 'ob-6', text: 'Documentation', completed: false },
           { id: 'ob-7', text: 'Cross training', completed: false },
@@ -119,12 +127,16 @@ export const INITIAL_CONTAINERS: Container[] = [
         id: 'ch-11', text: 'Upper hallway', completed: false,
         subSteps: [
           { id: 'ch-11-1', text: 'Fix rugs', completed: false },
+          { id: 'ch-11-2', text: 'Hang artwork', completed: false },
         ],
       },
       { id: 'ch-12', text: 'Hang hallway pics', subSteps: [], completed: false },
       { id: 'ch-13', text: 'Move kitty litter', subSteps: [], completed: false },
       { id: 'ch-14', text: 'Humidifiers', subSteps: [], completed: false },
       { id: 'ch-15', text: 'Medicines prep', subSteps: [], completed: false },
+      { id: 'ch-16', text: 'Print lists', subSteps: [], completed: false, evan: true },
+      { id: 'ch-17', text: 'Empty upstairs trash', subSteps: [], completed: false },
+      { id: 'ch-18', text: 'Big recycling box in living room', subSteps: [], completed: false },
     ],
   },
   {
@@ -193,6 +205,9 @@ export const INITIAL_CONTAINERS: Container[] = [
         completed: false,
       },
       { id: 'per-16', text: 'Cord management', subSteps: [], completed: false },
+      { id: 'per-17', text: 'Baba veterinarian', subSteps: [], completed: false },
+      { id: 'per-18', text: 'Mechanic', subSteps: [], completed: false },
+      { id: 'per-19', text: 'CVS', subSteps: [], completed: false },
     ],
   },
   {
@@ -244,6 +259,8 @@ export const INITIAL_CONTAINERS: Container[] = [
       { id: 'unt-3', text: 'Memo grading web app', subSteps: [], completed: false },
       { id: 'unt-4', text: 'Memo video assignments', subSteps: [], completed: false },
       { id: 'unt-5', text: 'PW recovery', subSteps: [], completed: false },
+      { id: 'unt-6', text: 'Tegan fall question', subSteps: [], completed: false },
+      { id: 'unt-7', text: 'Lucero email', subSteps: [], completed: false },
     ],
   },
   {
@@ -283,6 +300,13 @@ export const INITIAL_CONTAINERS: Container[] = [
     items: [
       { id: 'buy-1', text: 'Warm bulbs for guest room', subSteps: [], completed: false },
       { id: 'buy-2', text: 'Iron supplement', subSteps: [], completed: false },
+      { id: 'buy-3', text: 'Meatballs', subSteps: [], completed: false },
+      { id: 'buy-4', text: 'Pasta noodles', subSteps: [], completed: false },
+      { id: 'buy-5', text: 'Easy mac', subSteps: [], completed: false },
+      { id: 'buy-6', text: 'Butter', subSteps: [], completed: false },
+      { id: 'buy-7', text: 'Bananas', subSteps: [], completed: false },
+      { id: 'buy-8', text: 'Oranges', subSteps: [], completed: false },
+      { id: 'buy-9', text: 'Grapes', subSteps: [], completed: false },
     ],
   },
   {

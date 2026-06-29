@@ -62,14 +62,27 @@ function mergeNewItems(saved: Container[]): Container[] {
     const savedItemIds = new Set(savedContainer.items.map(i => i.id));
     const newItems = initial.items.filter(i => !savedItemIds.has(i.id) && !dismissed.has(i.id));
 
+    // Merge new subSteps into existing items
+    const initialItemMap = Object.fromEntries(initial.items.map(i => [i.id, i]));
+    let hasNewSubSteps = false;
+    const mergedItems = savedContainer.items.map(savedItem => {
+      const initialItem = initialItemMap[savedItem.id];
+      if (!initialItem) return savedItem;
+      const savedSubIds = new Set(savedItem.subSteps.map(s => s.id));
+      const newSubSteps = initialItem.subSteps.filter(s => !savedSubIds.has(s.id));
+      if (newSubSteps.length === 0) return savedItem;
+      hasNewSubSteps = true;
+      return { ...savedItem, subSteps: [...savedItem.subSteps, ...newSubSteps] };
+    });
+
     const savedSectionIds = new Set((savedContainer.sections ?? []).map(s => s.id));
     const newSections = (initial.sections ?? []).filter(s => !savedSectionIds.has(s.id));
 
-    if (newItems.length === 0 && newSections.length === 0) return savedContainer;
+    if (newItems.length === 0 && newSections.length === 0 && !hasNewSubSteps) return savedContainer;
 
     return {
       ...savedContainer,
-      items: [...savedContainer.items, ...newItems],
+      items: [...mergedItems, ...newItems],
       sections: newSections.length > 0
         ? [...(savedContainer.sections ?? []), ...newSections]
         : savedContainer.sections,
