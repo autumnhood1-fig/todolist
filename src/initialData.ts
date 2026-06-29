@@ -236,6 +236,7 @@ export const INITIAL_CONTAINERS: Container[] = [
       { id: 'per-24', text: 'Update New England bucket list', subSteps: [], completed: false },
       { id: 'per-25', text: 'Ask Alex about breakfast', subSteps: [], completed: false },
       { id: 'per-26', text: 'Goodwill run', subSteps: [], completed: false },
+      { id: 'per-27', text: 'Empty old pot on balcony', subSteps: [], completed: false },
     ],
   },
   {
